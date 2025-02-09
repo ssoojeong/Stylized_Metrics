@@ -33,7 +33,21 @@ ImageFile.LOAD_TRUNCATED_IMAGES = True
 from torchvision.transforms import ToTensor
 import os
 import numpy as np
+import cv2
 
+
+def convert_channel(image, device):
+    tf = ToTensor()
+    img_np = np.array(Image.open(image))
+
+    # RGBA(4채널) → RGB(3채널) 변환
+    if img_np.shape[-1] == 4:
+        img_np = cv2.cvtColor(img_np, cv2.COLOR_RGBA2RGB)
+
+    img_rgb = Image.fromarray(img_np)
+    img_tensor = tf(img_rgb).to(device)
+
+    return img_tensor
 
 def metric_clip(stylized_path):
     device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -87,10 +101,9 @@ def metric_vgg(norm_type, stylized_path, style_images):
         elif norm_type == 'style':
             img_path1=style_images
             img_path1_file = os.path.join(img_path1, os.listdir(img_path1)[0])
-        
 
-        img_1 = tf(Image.open(img_path1_file)).to(device)
-        img_2 = tf(Image.open(img_path2_file)).to(device)
+        img_1 = convert_channel(img_path1_file, device)
+        img_2 = convert_channel(img_path2_file, device)
         
         ###추가###
         if len(img_1.size())==3: img_1 = img_1.unsqueeze(0)

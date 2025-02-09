@@ -327,7 +327,7 @@ def compute_content_distance(path_to_stylized, path_to_content, batch_size, cont
     return dist_sum / N
 
 
-def compute_art_fid(path_to_stylized, path_to_style, path_to_content, batch_size=50, device='cuda', mode='art_fid_inf', content_metric='lpips', num_workers=1):
+def compute_art_fid(path_to_stylized, path_to_style, path_to_content, batch_size=10, device='cuda', mode='art_fid_inf', content_metric='lpips', num_workers=1):
     """Computes the FID for the given paths.
 
     Args:

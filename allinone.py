@@ -291,8 +291,8 @@ def lpips_calculate(config):
         "ms-ssim":0.0
 
     }
-    line = "LPIPS\n"
-    f.write(line)
+    # line = "LPIPS\n"
+    # f.write(line)
     device = config.device
     lpips = ps.PerceptualLoss(model='net-lin', net='vgg',
                                use_gpu=torch.cuda.is_available(),gpu_ids=0)
@@ -352,7 +352,7 @@ def get_parser(**parser_kwargs):
     parser.add_argument(
         "--style_types", 
         type=str,
-        default='5', #all
+        default='all', #all
     )
     parser.add_argument(
         "--content_type",
@@ -379,8 +379,11 @@ def main():
     config_all, model_transformer, model_backbone, save_output = iqt_init()
     opt = get_parser()
     
-    for style_type in sorted(opt.style_types.split(',')):
-    
+    if opt.style_types == 'all':
+        in_lists=['2','3','4','5','6','7','8']
+    else:
+        in_lists=opt.style_types.split(',')
+    for style_type in sorted(in_lists):
         config_all.ori_path=opt.content_path
         config_all.exp_path=os.path.join(opt.stylized_path, opt.model, f'style_{style_type}', f'content_{opt.content_type}')
         if opt.model in ['InST', 'S2PreST', 'IP-Adapter']:
@@ -404,7 +407,7 @@ def main():
         print(config_all.exp_path)
         f = open(os.path.join(config_all.save_path, config_all.result_file), 'w')
         f.write("fid:%f\nkid:%f\nlpips:%f\npsnr:%f\nms-ssim:%f\nart-fid:%f\nclip_loss:%f\nstyle_loss:%f\ncontent_loss:%f\n"%(fid,kid,lpips,psnr,ssim,art_fid_value,clip_loss, style_loss, content_loss))
-        
+        f.close()
 
         
 if __name__ == '__main__':
