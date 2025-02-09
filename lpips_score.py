@@ -19,6 +19,10 @@ def compute_metrics(
     if isinstance(b, Image.Image):
         b = np.asarray(b)
 
+    target_size = (512, 512)
+    a = np.array(Image.fromarray(a).resize(target_size, Image.LANCZOS))
+    b = np.array(Image.fromarray(b).resize(target_size, Image.LANCZOS))
+
     a = torch.from_numpy(a.copy()).float().unsqueeze(0)
     if a.size(3) == 3:
         a = a.permute(0, 3, 1, 2)

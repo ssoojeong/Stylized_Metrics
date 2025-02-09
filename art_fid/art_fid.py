@@ -288,7 +288,8 @@ def compute_content_distance(path_to_stylized, path_to_content, batch_size, cont
                                       ToTensor(),
                                       Normalize((0.48145466, 0.4578275, 0.40821073), (0.26862954, 0.26130258, 0.27577711))])
     else:
-        content_transforms = ToTensor()
+        content_transforms = Compose([Resize(224, interpolation=InterpolationMode.BICUBIC),
+                                      ToTensor(),]) #ToTensor()
     
     dataset_stylized = ImagePathDataset(stylized_image_paths, transforms=content_transforms)
     dataloader_stylized = torch.utils.data.DataLoader(dataset_stylized,

@@ -308,6 +308,7 @@ def lpips_calculate(config):
         ref = prepare_image(img_ref)
         ref = ref.to(device)
         dist = dist.to(device)
+        
         lpips_score = lpips(ref, dist)
         sums["lpips"] += lpips_score.item()
         # print(score.item())
@@ -367,7 +368,7 @@ def get_parser(**parser_kwargs):
     parser.add_argument(
         "--model",
         type=str,
-        default='IP-Adapter' #IP-Adapter(diffusion), StyleID(diffusion), DiffuseIT(ldm2), Zero(diffusion) // InST, S2PreST
+        default='Zero' #IP-Adapter(diffusion), StyleID(diffusion), DiffuseIT(ldm2), Zero(diffusion) // InST, S2PreST
     )
     opt, unknown = parser.parse_known_args()
     return opt
@@ -380,7 +381,7 @@ def main():
     opt = get_parser()
     
     if opt.style_types == 'all':
-        in_lists=['2','3','4','5','6','7','8']
+        in_lists=['1','2','3','4','5','6','7','8']
     else:
         in_lists=opt.style_types.split(',')
     for style_type in sorted(in_lists):
@@ -391,7 +392,7 @@ def main():
             config_all.result_file = f'allinone_{str(opt.style_guidance)}.txt'
         config_all.save_path = os.path.join('./results', opt.model, f'style_{style_type}')
         os.makedirs(config_all.save_path, exist_ok=True)
-    
+        
         # iqt = iqt_calculate(config_all, model_transformer, model_backbone, save_output )
         # dist = dist_calculate(config_all)
         fid, kid = fkid_calculate(config_all)

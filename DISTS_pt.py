@@ -112,9 +112,9 @@ class DISTS(torch.nn.Module):
         else:
             return score
 
-def prepare_image(image, resize=False):
-    if resize and min(image.size)>768:
-        image = transforms.functional.resize(image,768)
+def prepare_image(image, resize=True):
+    if resize: #and min(image.size)>512:
+        image = transforms.functional.resize(image,512)
     image = transforms.ToTensor()(image)
     return image.unsqueeze(0)
 
