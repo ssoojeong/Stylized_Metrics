@@ -1,0 +1,9 @@
+fid:151.317028
+kid:0.052304
+lpips:0.376913
+psnr:19.283856
+ms-ssim:0.697656
+art-fid:47.076984
+clip_loss:0.330889
+style_loss:0.090568
+content_loss:152.937729
