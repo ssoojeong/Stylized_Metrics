@@ -9,7 +9,7 @@
 ## All in One 
 modify the argparse components
 ```
-python allinone.py
+CUDA_VISIBLE_DEVICES=0 python allinone.py
 ```
 ## FID
 ### how to use
